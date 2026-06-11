@@ -16,17 +16,28 @@ Native:
 cargo bench -p prover --bench merkle_prefix_tree
 ```
 
-WASI, following the Criterion WASI guide:
+Browser, following the Criterion WASI guide:
 
 ```sh
 rustup target add wasm32-wasip1
 cargo bench -p prover --bench merkle_prefix_tree --target wasm32-wasip1 --no-run
-wasmtime run target/wasm32-wasip1/release/deps/merkle_prefix_tree-*.wasm
 ```
 
-At the moment this flow is documented but not validated in this repository's
-current development environment, because `wasm32-wasip1` and `wasmtime` were
-not installed when this benchmark was added.
+Then open `https://webassembly.sh/` in a browser and run:
+
+1. `wapm upload`
+2. Upload the generated benchmark artifact from
+   `target/wasm32-wasip1/release/deps/merkle_prefix_tree-*.wasm`
+3. Run the installed command, which is the uploaded wasm filename without the
+   `.wasm` suffix
+
+Validated locally on June 11, 2026 in `webassembly.sh`:
+
+- `merkle_prefix_tree_build/16` through `merkle_prefix_tree_build/16384` reported `Success`
+- `merkle_prefix_tree_proof/16` through `merkle_prefix_tree_proof/16384` reported `Success`
+
+In this browser shell run, the benchmark completed successfully for all cases,
+but no timing numbers were printed to the terminal output.
 
 The benchmark uses Merkle depth `32` and leaf counts:
 
